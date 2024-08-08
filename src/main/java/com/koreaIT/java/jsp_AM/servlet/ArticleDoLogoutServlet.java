@@ -1,6 +1,5 @@
 package com.koreaIT.java.jsp_AM.servlet;
 
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,9 +15,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
+@WebServlet("/member/doLogout")
+public class ArticleDoLogoutServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -42,33 +42,14 @@ public class ArticleListServlet extends HttpServlet {
 		try {
 			conn = DriverManager.getConnection(url, user, password);
 
-			int page = 1;
+			HttpSession session = request.getSession();
+			session.removeAttribute("loginedMemberId");
+			session.removeAttribute("loginedMemberLoginId");
+			session.removeAttribute("loginedMember");
 
-			if (request.getParameter("page") != null && request.getParameter("page").length() != 0) {
-				page = Integer.parseInt(request.getParameter("page"));
-			}
-			
-			int itemsInAPage = 11;
-			int limitFrom = (page - 1) * itemsInAPage;
 
-			SecSql sql = SecSql.from("SELECT COUNT(*) AS cnt");
-			sql.append("FROM article");
-
-			int totalCnt = DBUtil.selectRowIntValue(conn, sql);
-			int totalPage = (int) Math.ceil(totalCnt / (double) itemsInAPage);
-
-			sql = SecSql.from("SELECT *");
-			sql.append("FROM article");
-			sql.append("ORDER BY id DESC");
-			sql.append("LIMIT ?, ?;", limitFrom, itemsInAPage);
-
-			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
-
-			request.setAttribute("page", page);
-			request.setAttribute("totalPage", totalPage);
-			request.setAttribute("totalCnt", totalCnt);
-			request.setAttribute("articleRows", articleRows);
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
+			response.getWriter()
+					.append(String.format("<script>alert(' 로그아웃 되셨습니다.'); location.replace('../home/main');</script>"));
 
 		} catch (SQLException e) {
 			System.out.println("에러 1 : " + e);

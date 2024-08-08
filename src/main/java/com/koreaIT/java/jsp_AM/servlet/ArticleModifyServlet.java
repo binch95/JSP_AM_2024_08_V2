@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/article/modify")
 public class ArticleModifyServlet extends HttpServlet {
@@ -40,6 +41,13 @@ public class ArticleModifyServlet extends HttpServlet {
 
 		try {
 			conn = DriverManager.getConnection(url, user, password);
+			
+			HttpSession session = request.getSession();
+			if (session.getAttribute("loginedMemberId") == null) {
+				response.getWriter()
+				.append("<script>alert('권한이 없으요!!'); location.replace('list');</script>");
+				return;
+			}
 
 			int id = Integer.parseInt(request.getParameter("id"));
 

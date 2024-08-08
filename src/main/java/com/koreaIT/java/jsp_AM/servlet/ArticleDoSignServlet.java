@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/doSign")
+@WebServlet("/member/doSign")
 public class ArticleDoSignServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,15 +52,9 @@ public class ArticleDoSignServlet extends HttpServlet {
 	        sql.append("FROM `member`");
 	        sql.append("WHERE loginId = ?;", id);
 	        boolean iduse = DBUtil.selectRowBooleanValue(conn, sql);
-			if(id.equals("")) {
-				response.getWriter().append("<script>alert('아이디를 입력해주세요.');</script>");
-				return;
-			}
+
 	        if(iduse) {
 	        	response.getWriter().append("<script>alert('이미 가입되어있는 아이디입니다.'); location.replace('sign');</script>");
-	        	return;
-	        }else if(!pw.equals(pwcf)) {
-	        	response.getWriter().append("<script>alert('비밀번호가 다릅니다.'); location.replace('sign');</script>");
 	        	return;
 	        }
 			

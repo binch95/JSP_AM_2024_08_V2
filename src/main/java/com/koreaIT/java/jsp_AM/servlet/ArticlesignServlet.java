@@ -8,13 +8,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/sign")
+@WebServlet("/member/sign")
 public class ArticlesignServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.getRequestDispatcher("/jsp/article/sign.jsp").forward(request, response);
+		request.getRequestDispatcher("/jsp/member/sign.jsp").forward(request, response);
 
 	}
 
